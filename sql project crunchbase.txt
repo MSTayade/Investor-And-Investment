@@ -1,0 +1,41 @@
+--q1) From which countries(Top 2) most investors are from?
+
+	select top 10 country_code,SUM(investment_count) as count from investors group by country_code order by count desc
+
+--q2) How many investors have investment partners?
+
+	select investment_partner,COUNT(*) from investors where investment_partner = 1 group by investment_partner
+
+--q3) Type of funding round investors are investing in?
+
+	select type,investment_type,COUNT(*) as cnt from funding_rounds group by investment_type,type order by cnt desc
+
+--q4) Distribution of investors between Organization and individual person
+
+	select type ,COUNT(*) as cnt from investors group by type
+
+--q5) Regional Analysis of investors
+
+	select distinct region,sum(investment_count) count_investment from investors 
+	where region is not null and investment_count is not null group by region order by count_investment desc
+ 
+--q6) Monthly Analysis of investors and investments
+
+ 	select month(created_at), sum(raised_amount_usd) as sum from funding_rounds group by month(created_at)
+
+--q7) Analysis of social media presence of investors
+
+ 	select COUNT(facebook_url) as facebook,COUNT(linkedin_url) as linkedin,COUNT(twitter_url) as twitter  from investors
+
+--q8) Qualification (Degree) and Institution Analysis of investors
+
+ 	select  top 10 degree_type,count(institution_name) cnt from degrees where degree_type != 'unknown' group by degree_type order by cnt desc
+
+--q9) Trend of acquistion price by year between 2018 and 2019
+
+	select   year(acquired_on),sum(price_usd) from acquisitions 
+ 	group by year(acquired_on) having year(acquired_on) between 2018 and 2019
+
+--q10) Top 5 countryies fundings in a organization
+
+	select top 5 country_code,sum(total_funding_usd)  as sum from organizations group by country_code order by sum desc
